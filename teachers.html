@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teachers</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-default">
+          <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">Ajax REST Client</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Student <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="get-student.html">Get Student By ID</a></li>
+                    <li><a href="students.html">Get All Students</a></li>
+                    <li><a href="add-student.html">Add New Student</a></li>
+                    <li><a href="update-student.html">Update Existing Student</a></li>
+                    <li><a href="delete-student.html">Delete An Student</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="student-assistant.html">Get Student's Assistant</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Delete All Students</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Teacher <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="get-teacher.html">Get Teacher By ID</a></li>
+                    <li class="active"><a href="teachers.html">Get All Teachers</a></li>
+                    <li><a href="add-teacher.html">Add New Teacher</a></li>
+                    <li><a href="update-teacher.html">Update Existing Teacher</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+        </nav>
+        <div class="col-md-4 col-md-offset-4">
+            <div class="form-area">
+                <form role="form">
+                <br style="clear:both">
+                    <h3 style="margin-bottom: 25px; text-align: center;">Get All Teachers :</h3>
+                    <button type="button" id="submit" name="submit" class="btn btn-success" style="display: block;margin: 0 auto;">Get Teachers</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6 col-md-offset-3 resultBox">
+            <h3 style="margin-bottom: 25px; text-align: center;">Returned Teachers :</h3>
+            <p id="result"></p>
+            <table class="table table-striped" id="records_table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>First Name :</th>
+                    <th>Last Name :</th>
+                    <th>Department :</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            $('#submit').click(function(){
+                $.ajax(
+                {
+                    crossOrigin: true,
+                    type: "GET",
+                    url: "http://127.0.0.1:8080/JDBC-REST/api/resource/teachers/",
+                    dataType: 'json',
+                    success: function (data,status,xhr) {   // success callback function
+                        json_str = JSON.stringify(data);
+                        json_data = JSON.parse(json_str);
+                        console.log(json_data);
+                        $.each (json_data, function (i, item) {
+                            var $tr = $('<tr>').append(
+                                $('<td>').text(item.id),
+                                $('<td>').text(item.firstName),
+                                $('<td>').text(item.lastName),
+                                $('<td>').text(item.department)
+                            ).appendTo('#records_table');
+                        });
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) { // error callback
+                        $('#result').append('Error: ' + textStatus + errorMessage);
+                    }
+                });
+            });
+
+
+        });
+
+
+
+    </script>
+
+</body>
+</html>
